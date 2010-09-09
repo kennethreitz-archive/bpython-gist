@@ -112,6 +112,10 @@ OPTS.arg_spec = True
 OPTS.hist_file = '~/.pythonhist'
 OPTS.hist_length = 100
 OPTS.flush_output = True
+OPTS.use_gist = False
+OPTS.github_login = None
+OPTS.github_token = None
+
 
 # TODO:
 #
@@ -758,13 +762,16 @@ class Repl(object):
 
         params = {
             "file_ext[gistfile1]": 'Python',
-            "file_name[gistfile1]": 'name',
+            "file_name[gistfile1]": 'pylog',
             "file_contents[gistfile1]": s,
             # "login": None,
             # "token": None
         }
+        if OPTS.github_login and OPTS.github_token:
+            params['login'] = OPTS.github_login
+            params['token'] = OPTS.github_token
 
-        self.statusbar.message('Posting data to pastebin...')
+        self.statusbar.message('Posting data to gist.github.com...')
         try:
             conn = httplib.HTTPConnection("gist.github.com")
             conn.request("POST", "/gists", urllib.urlencode(params))
@@ -1248,8 +1255,8 @@ class Repl(object):
             self.write2file()
             return ''
 
-        elif self.c == 'KEY_F(8)':
-            self.pastebin()
+        elif self.c == 'KEY_F(8)':    
+            self.gist() if OPTS.use_gist else self.pastebin()
             return ''
 
         elif self.c == '\n':
@@ -1604,8 +1611,10 @@ def init_wins(scr, cols):
 # Thanks to Angus Gibson for pointing out this missing line which was causing
 # problems that needed dirty hackery to fix. :)
 
+    _service = 'Gist' if OPTS.use_gist else 'Pastebin'
+    
     statusbar = Statusbar(scr, main_win,
-        ".:: <C-d> Exit  <C-r> Rewind  <F2> Save  <F8> Pastebin ::.",
+        ".:: <C-d> Exit  <C-r> Rewind  <F2> Save  <F8> %s ::." % (_service),
         (cols["g"]) * cols["y"] + 1)
 
     return main_win, statusbar
