@@ -86,7 +86,9 @@ as you type.
 	will be sent to a pastebin and a URL is returned for you
 	to do what you like with. I've hardcoded rafb.net/paste
 	in for now, that needs to be fixed so it's configurable.
-	Next release, I promise.
+	Next release, I promise. Support for gist.github.com
+	was just added. Just add use_gist to your ~/.bpythorc
+	file, and you'll be pasting strait to Gists instead.
 
 * Flush curses screen to stdout.
 	A featurette, perhaps, but I thought it was worth noting.
