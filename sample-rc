@@ -23,3 +23,7 @@ hist_len = 100
 # Soft tab size:
 tab_length = 4
 
+# Gist configuration
+use_gist = true
+github_login = kennethreitz
+github_token = xxxxxxxxxxxxxxxxx
