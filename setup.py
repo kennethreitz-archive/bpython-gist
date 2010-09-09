@@ -14,11 +14,11 @@ else:
     man_dir = 'share/man'
 
 setup(
-    name="bpython",
+    name="bpython-gist",
     version = "0.7.1",
-    author = "Robert Anthony Farrell",
-    author_email = "robertanthonyfarrell@gmail.com",
-    description = "Fancy Interface to the Python Interpreter",
+    author = "Robert Anthony Farrell (fork by Kenneth Reitz)",
+    author_email = "me@kennethreit.zcom",
+    description = "Fancy Interface to the Python Interpreter w/ Gist Integration",
     license = "MIT/X",
     url = "http://www.noiseforfree.com/bpython/",
     long_description = """bpython is a fancy interface to the Python
