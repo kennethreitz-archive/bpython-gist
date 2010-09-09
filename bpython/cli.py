@@ -36,6 +36,7 @@ import re
 import time
 import urllib
 import rlcompleter
+import httplib
 import inspect
 import signal
 import struct
@@ -751,6 +752,42 @@ class Repl(object):
         r_url = rx.groups()[0]
         self.statusbar.message('Pastebin URL: %s' % r_url, 10)
 
+    def gist(self):
+        """Upload to a gist and display the URL in the status bar."""
+        s = self.getstdout()
+
+        params = {
+            "file_ext[gistfile1]": 'Python',
+            "file_name[gistfile1]": 'name',
+            "file_contents[gistfile1]": s,
+            # "login": None,
+            # "token": None
+        }
+
+        self.statusbar.message('Posting data to pastebin...')
+        try:
+            conn = httplib.HTTPConnection("gist.github.com")
+            conn.request("POST", "/gists", urllib.urlencode(params))
+            response = conn.getresponse()
+            ret = None
+            if response.status == 302:
+                data = response.read()
+                ret = re.search("(http://gist.github.com/\d+)", data).group(1)
+            else:
+                ret = None  
+
+        except (socket.error, socket.timeout, IOError), e:
+            self.statusbar.message( 'Upload failed: %s' % str(e) )
+            return
+
+        if not ret:
+            self.statusbar.message(
+                'Error parsing gist URL! Please report a bug.')
+            return
+
+        self.statusbar.message('Gist URL: %s' % ret, 10)
+        return
+        
     def make_list(self, items):
         """Compile a list of items. At the moment this simply returns
         the list; it's here in case I decide to add any more functionality.
